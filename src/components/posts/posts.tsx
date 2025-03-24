@@ -8,6 +8,9 @@ type PostsProps = {
 };
 export function Posts({ onLoadingHandler }: PostsProps) {
   const [posts, setPosts] = useState<TPost[]>([]);
+  const [count, setCount] = useState<number>(5);
+
+  const STEP = 5;
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -23,8 +26,8 @@ export function Posts({ onLoadingHandler }: PostsProps) {
   return (
     <div>
       <h1 className="mb-5">Posts</h1>
-      <ul className="flex flex-col gap-5 lg:grid grid-cols-2">
-        {posts.map((item) => (
+      <ul className="flex flex-col gap-5 lg:grid grid-cols-2 mb-5">
+        {posts.slice(0, count).map((item) => (
           <li key={item.id}>
             <div className="border-2 border-blue-600 p-5">
               <h2 className="text-xl font-black text-green-700">
@@ -37,11 +40,17 @@ export function Posts({ onLoadingHandler }: PostsProps) {
                 onLoadingHandler={onLoadingHandler}
                 userId={item.userId}
               />
-              <CommentsList onLoadingHandler={onLoadingHandler}  postId={item.id}/>
+              <CommentsList
+                onLoadingHandler={onLoadingHandler}
+                postId={item.id}
+              />
             </div>
           </li>
         ))}
       </ul>
+      <button className="p-5 bg-cyan-800" onClick={() => setCount(count + STEP)}>
+        Показать еще {STEP} постов
+      </button>
     </div>
   );
 }
